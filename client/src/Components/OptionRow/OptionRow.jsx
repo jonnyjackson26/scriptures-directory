@@ -9,7 +9,7 @@ const OptionRow = ({ option, isSelected, onHover, onSelect, index }) => {
       onClick={() => onSelect(option)}
     >
       <div className="option-text">
-        {option.book} {option.chapter && ` ${option.chapter}`}
+        {option.displayText}
       </div>
       <div className="option-category">
         {option.category}
@@ -17,4 +17,5 @@ const OptionRow = ({ option, isSelected, onHover, onSelect, index }) => {
     </li>
   );
 };
+
 export default OptionRow;

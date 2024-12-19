@@ -39,8 +39,12 @@ function SearchBar({ options, onNavigate }) {
         body: JSON.stringify({ query }),
       });
       const data = await response.json();
-      setCache((prevCache) => ({ ...prevCache, [query]: data })); // Cache the result
-      setFilteredOptions(data); // Update state with filtered options
+      const formattedData = data.map(item => ({
+        ...item,
+        displayText: `${item.book}${item.chapter ? ` ${item.chapter}` : ''}`
+      }));
+      setCache((prevCache) => ({ ...prevCache, [query]: formattedData }));
+      setFilteredOptions(formattedData);
     } catch (error) {
       console.error("Error fetching filtered options:", error);
     }
