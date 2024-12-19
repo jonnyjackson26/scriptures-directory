@@ -1,7 +1,7 @@
 import React from "react";
 import "./OptionRow.css";
 
-const OptionRow = ({ option, isSelected, onHover, onSelect, index, category }) => {
+const OptionRow = ({ option, isSelected, onHover, onSelect, index }) => {
   return (
     <li
       className={`autocomplete-option ${isSelected ? "selected" : ""}`}
@@ -9,13 +9,12 @@ const OptionRow = ({ option, isSelected, onHover, onSelect, index, category }) =
       onClick={() => onSelect(option)}
     >
       <div className="option-text">
-        {option}
+        {option.book} {option.chapter && ` ${option.chapter}`}
       </div>
       <div className="option-category">
-        {category}
+        {option.category}
       </div>
     </li>
   );
 };
-
 export default OptionRow;

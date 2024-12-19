@@ -140,21 +140,32 @@ books = [
     "Moses", "Abraham", "Joseph Smith-Matthew", "Joseph Smith-History", "Articles of Faith"
 ]
 
-# Function to filter options based on query
 def filter_options(query, options):
-    # Clean the query by removing spaces and dashes
     query_cleaned = query.replace(" ", "").replace("-", "").lower()
     
-    # Check if the query is an abbreviation like "doc" or "dc" and map to the full title
+    # Check for abbreviations
     if query_cleaned in abbreviation_map:
-        return [abbreviation_map[query_cleaned]]
+        return [{"book": abbreviation_map[query_cleaned], "category": book_categories.get(abbreviation_map[query_cleaned], "Unknown Category"), "chapter": None}]
     
-    # Filter options by removing spaces and dashes and comparing
-    return [
+    # Extract book name and chapter number
+    # This regex now accounts for books starting with numbers
+    match = re.match(r'((?:\d+\s*)?[a-z]+)(\d+)?', query_cleaned)
+    chapter = None
+    if match:
+        book_part = match.group(1)
+        chapter = int(match.group(2)) if match.group(2) else None
+    else:
+        book_part = query_cleaned
+    
+    filtered_books = [
         option for option in options
-        if query_cleaned in option.replace(" ", "").replace("-", "").lower()
+        if book_part in option.replace(" ", "").replace("-", "").lower()
     ]
-
+    
+    return [
+        {"book": book, "category": book_categories.get(book, "Unknown Category"), "chapter": chapter}
+        for book in filtered_books
+    ]
 
 
 @app.route("/filter-options", methods=["POST"])
@@ -162,16 +173,9 @@ def filter_options_endpoint():
     data = request.json
     query = data.get("query", "")
     
-    # Call the filter_options function to filter books based on the query
     filtered_books = filter_options(query, books)
     
-    # Now add the category for each filtered book from book_categories
-    filtered_books_with_categories = [
-        {"book": book, "category": book_categories.get(book, "Unknown Category")}
-        for book in filtered_books
-    ]
-    
-    return jsonify(filtered_books_with_categories)
+    return jsonify(filtered_books)
 
 
 

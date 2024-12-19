@@ -6,9 +6,9 @@ import { books } from "./assets/books";
 function App() {
   const navigate = useNavigate();
 
-  const handleNavigate = (book) => {
+  const handleNavigate = (book, chapter) => {
     // This is a mock navigation. You can replace it with actual routing logic.
-    alert(`Navigating to: ${book}`);
+    alert(`Navigating to: ${book} chapter ${chapter}`);
   };
 
   return (

@@ -63,29 +63,24 @@ function SearchBar({ options, onNavigate }) {
 
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
-      // Navigate down
       setSelectedIndex((prevIndex) =>
         prevIndex < filteredOptions.length - 1 ? prevIndex + 1 : 0
       );
     } else if (e.key === "ArrowUp") {
-      // Navigate up
       setSelectedIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : filteredOptions.length - 1
       );
     } else if (e.key === "Enter") {
-      // Trigger navigation for the selected option
       if (filteredOptions.length > 0) {
         const selectedOption = filteredOptions[selectedIndex];
-        onNavigate(selectedOption.book);
-        setQuery(selectedOption.book);
-        setFilteredOptions([]);
+        handleOptionSelect(selectedOption);
       }
     }
   };
 
   const handleOptionSelect = (option) => {
-    onNavigate(option);
-    setQuery(option);
+    onNavigate(option.book, option.chapter);
+    setQuery(option.book + (option.chapter ? " " + option.chapter : ""));
     setFilteredOptions([]);
   };
 
@@ -97,9 +92,7 @@ function SearchBar({ options, onNavigate }) {
     e.preventDefault();
     if (filteredOptions.length > 0) {
       const selectedOption = filteredOptions[selectedIndex];
-      onNavigate(selectedOption);
-      setQuery(selectedOption);
-      setFilteredOptions([]);
+      handleOptionSelect(selectedOption);
     }
   };
 

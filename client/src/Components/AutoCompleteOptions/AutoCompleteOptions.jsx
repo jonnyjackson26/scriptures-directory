@@ -8,9 +8,8 @@ const AutocompleteOptions = ({ options, selectedIndex, onHover, onSelect }) => {
     <ul className="autocomplete-options">
       {options.map((item, index) => (
         <OptionRow
-          key={item.book}
-          option={item.book}
-          category={item.category} // Pass category along with book
+          key={item.book + (item.chapter || "")}
+          option={item}
           isSelected={index === selectedIndex}
           onHover={onHover}
           onSelect={onSelect}
