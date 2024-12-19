@@ -18,6 +18,7 @@ function SearchBar({ options, onNavigate }) {
 
   const handleInputChange = (value) => {
     setQuery(value);
+    setFilteredOptions([]);
     getFilteredOptions(value);
     setSelectedIndex(0);
   };
@@ -44,9 +45,12 @@ function SearchBar({ options, onNavigate }) {
         displayText: `${item.book}${item.chapter ? ` ${item.chapter}` : ''}${item.verse ? `:${item.verse}` : ''}`
       }));
       setCache((prevCache) => ({ ...prevCache, [query]: formattedData }));
+      // Set new results
       setFilteredOptions(formattedData);
     } catch (error) {
       console.error("Error fetching filtered options:", error);
+      // Clear results in case of error
+      setFilteredOptions([]);
     }
 
     setIsLoading(false);
