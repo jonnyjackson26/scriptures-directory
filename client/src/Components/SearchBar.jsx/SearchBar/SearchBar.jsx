@@ -84,8 +84,8 @@ function SearchBar({ options, onNavigate }) {
   };
 
   const handleOptionSelect = (option) => {
-    onNavigate(option.book);
-    setQuery(option.book);
+    onNavigate(option);
+    setQuery(option);
     setFilteredOptions([]);
   };
 
@@ -97,8 +97,8 @@ function SearchBar({ options, onNavigate }) {
     e.preventDefault();
     if (filteredOptions.length > 0) {
       const selectedOption = filteredOptions[selectedIndex];
-      onNavigate(selectedOption.book);
-      setQuery(selectedOption.book);
+      onNavigate(selectedOption);
+      setQuery(selectedOption);
       setFilteredOptions([]);
     }
   };
