@@ -1,0 +1,24 @@
+.autocomplete-option {
+    display: flex;
+    justify-content: space-between; /* Space between the book name and the category */
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .autocomplete-option:hover,
+  .autocomplete-option.selected {
+    background-color: #0078d7;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .option-text {
+    flex: 1; /* Takes all available space */
+  }
+  
+  .option-category {
+    color: #777; /* Lighter color for category */
+    font-size: 14px; /* Smaller font size */
+  }
+  
