@@ -8,6 +8,13 @@ function SearchBar({ options, onNavigate }) {
   const [query, setQuery] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0); // Default to the first option
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Cache to avoid fetching data again if query is repeated
+  const [cache, setCache] = useState({});
+
+
+
 
   const handleInputChange = (value) => {
     setQuery(value);
@@ -15,8 +22,14 @@ function SearchBar({ options, onNavigate }) {
     setSelectedIndex(0); // Reset to highlight the first option
   };
 
-  // Function to fetch filtered options from the backend
   const getFilteredOptions = async (query) => {
+    if (cache[query]) {
+      setFilteredOptions(cache[query]); // Use cached data if available
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
       const response = await fetch("http://localhost:5000/filter-options", {
         method: "POST",
@@ -26,11 +39,27 @@ function SearchBar({ options, onNavigate }) {
         body: JSON.stringify({ query }),
       });
       const data = await response.json();
+      setCache((prevCache) => ({ ...prevCache, [query]: data })); // Cache the result
       setFilteredOptions(data); // Update state with filtered options
     } catch (error) {
       console.error("Error fetching filtered options:", error);
     }
+
+    setIsLoading(false);
   };
+
+  // Debounce the search to prevent excessive requests
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (query) {
+        getFilteredOptions(query);
+      } else {
+        setFilteredOptions([]); // Clear options when query is empty
+      }
+    }, 300); // Adjust delay as needed (e.g., 300ms)
+
+    return () => clearTimeout(timer); // Cleanup the previous timeout
+  }, [query]);
 
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
