@@ -18,13 +18,13 @@ function SearchBar({ options, onNavigate }) {
 
   const handleInputChange = (value) => {
     setQuery(value);
-    setFilteredOptions(getFilteredOptions(value));
-    setSelectedIndex(0); // Reset to highlight the first option
+    getFilteredOptions(value);
+    setSelectedIndex(0);
   };
 
   const getFilteredOptions = async (query) => {
     if (cache[query]) {
-      setFilteredOptions(cache[query]); // Use cached data if available
+      setFilteredOptions(cache[query]);
       return;
     }
 
@@ -41,7 +41,7 @@ function SearchBar({ options, onNavigate }) {
       const data = await response.json();
       const formattedData = data.map(item => ({
         ...item,
-        displayText: `${item.book}${item.chapter ? ` ${item.chapter}` : ''}`
+        displayText: `${item.book}${item.chapter ? ` ${item.chapter}` : ''}${item.verse ? `:${item.verse}` : ''}`
       }));
       setCache((prevCache) => ({ ...prevCache, [query]: formattedData }));
       setFilteredOptions(formattedData);
@@ -83,8 +83,8 @@ function SearchBar({ options, onNavigate }) {
   };
 
   const handleOptionSelect = (option) => {
-    onNavigate(option.book, option.chapter);
-    setQuery(option.book + (option.chapter ? " " + option.chapter : ""));
+    onNavigate(option.book, option.chapter, option.verse);
+    setQuery(option.displayText);
     setFilteredOptions([]);
   };
 
