@@ -11,11 +11,25 @@ function SearchBar({ options, onNavigate }) {
 
   const handleInputChange = (value) => {
     setQuery(value);
-    const filtered = options.filter((option) =>
-      option.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredOptions(filtered);
+    setFilteredOptions(getFilteredOptions(value));
     setSelectedIndex(0); // Reset to highlight the first option
+  };
+
+  // Function to fetch filtered options from the backend
+  const getFilteredOptions = async (query) => {
+    try {
+      const response = await fetch("http://localhost:5000/filter-options", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
+      });
+      const data = await response.json();
+      setFilteredOptions(data); // Update state with filtered options
+    } catch (error) {
+      console.error("Error fetching filtered options:", error);
+    }
   };
 
   const handleKeyDown = (e) => {

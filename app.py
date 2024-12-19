@@ -6,30 +6,36 @@ import os
 app = Flask(__name__, static_folder="dist", static_url_path="")
 CORS(app)
 
-# Load the JSON file once when the server starts
-with open("data/bom.json", "r", encoding="utf-8") as f:
-    bom_data = json.load(f)
 
-@app.route("/search", methods=["POST"])
-def search_bom():
+
+# Example of a Python function you want to use
+def filter_options(query, options):
+    return [option for option in options if query.lower() in option.lower()]
+
+books = [
+    "1 Nephi", "2 Nephi", "Jacob", "Enos", "Jarom", "Omni", "Words of Mormon", "Mosiah",
+    "Alma", "Helaman", "3 Nephi", "4 Nephi", "Mormon", "Ether", "Moroni", "Genesis",
+    "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel",
+    "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", 
+    "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah", 
+    "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", 
+    "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi",
+    "Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", 
+    "Galatians", "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
+    "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", 
+    "1 John", "2 John", "3 John", "Jude", "Revelation"
+]
+@app.route("/filter-options", methods=["POST"])
+def filter_options_endpoint():
     data = request.json
-    search_term = data.get("search", "")
-    case_sensitive = data.get("case_sensitive", False)
-    results = []
+    query = data.get("query", "")
+    
+    # Call your Python function
+    filtered_options = filter_options(query, books)
+    
+    return jsonify(filtered_options)
 
-    for book, chapters in bom_data.items():
-        for chapter, verses in chapters.items():
-            for verse_number, verse_text in enumerate(verses, start=1):
-                if (case_sensitive and search_term in verse_text) or \
-                   (not case_sensitive and search_term.lower() in verse_text.lower()):
-                    results.append({
-                        "book": book,
-                        "chapter": chapter,
-                        "verse": verse_number,
-                        "text": verse_text
-                    })
 
-    return jsonify(results)
 
 # Serve React frontend
 @app.route("/")
