@@ -115,6 +115,8 @@ abbreviation_map = {
     "jsh": "Joseph Smith-History",
     "jsm": "Joseph Smith-Matthew",
     "aof": "Articles of Faith",
+    "wom": "Words of Mormon",
+    "sos": "Song of Solomon",
 }
 
 books = [

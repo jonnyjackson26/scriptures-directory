@@ -76,16 +76,16 @@ function SearchBar({ options, onNavigate }) {
       // Trigger navigation for the selected option
       if (filteredOptions.length > 0) {
         const selectedOption = filteredOptions[selectedIndex];
-        onNavigate(selectedOption);
-        setQuery(selectedOption);
+        onNavigate(selectedOption.book);
+        setQuery(selectedOption.book);
         setFilteredOptions([]);
       }
     }
   };
 
   const handleOptionSelect = (option) => {
-    onNavigate(option);
-    setQuery(option);
+    onNavigate(option.book);
+    setQuery(option.book);
     setFilteredOptions([]);
   };
 
@@ -97,8 +97,8 @@ function SearchBar({ options, onNavigate }) {
     e.preventDefault();
     if (filteredOptions.length > 0) {
       const selectedOption = filteredOptions[selectedIndex];
-      onNavigate(selectedOption);
-      setQuery(selectedOption);
+      onNavigate(selectedOption.book);
+      setQuery(selectedOption.book);
       setFilteredOptions([]);
     }
   };
